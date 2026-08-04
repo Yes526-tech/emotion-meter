@@ -2,15 +2,13 @@ const connection = new signalR.HubConnectionBuilder()
     .withUrl("/moodHub")
     .build();
 
-// SignalR bağlantısını başlat
 connection.start().catch(function (err) {
     return console.error(err.toString());
 });
 
-// Diğer cihazlardan (veya kendi cihazından tetiklenen) gelen veriyi al
-connection.on("ReceiveMoodUpdate", function (userName, sinir, stres, mutluluk) {
+// Diğer cihazlardan gelen veriyi al
+connection.on("ReceiveMoodUpdate", function (userName, stres, mutluluk) {
     if (userName === "Gülşah") {
-        document.getElementById("sinirRange").value = sinir;
         document.getElementById("stresRange").value = stres;
         document.getElementById("mutlulukRange").value = mutluluk;
         updateUIVisuals();
@@ -21,11 +19,10 @@ connection.on("ReceiveMoodUpdate", function (userName, sinir, stres, mutluluk) {
 window.sendMoodUpdate = function() {
     updateUIVisuals();
     
-    let sinir = document.getElementById("sinirRange").value;
     let stres = document.getElementById("stresRange").value;
     let mutluluk = document.getElementById("mutlulukRange").value;
 
-    connection.invoke("UpdateMood", "Gülşah", parseInt(sinir), parseInt(stres), parseInt(mutluluk))
+    connection.invoke("UpdateMood", "Gülşah", parseInt(stres), parseInt(mutluluk))
               .catch(function (err) {
                   console.error(err.toString());
               });
@@ -33,41 +30,57 @@ window.sendMoodUpdate = function() {
 
 // Değer etiketlerini, ışın kılıcı dolgularını ve Ahtapot algoritmasını güncelle
 function updateUIVisuals() {
-    let sinirRange = document.getElementById("sinirRange");
     let stresRange = document.getElementById("stresRange");
     let mutlulukRange = document.getElementById("mutlulukRange");
     
-    let sinir = parseInt(sinirRange.value);
     let stres = parseInt(stresRange.value);
     let mutluluk = parseInt(mutlulukRange.value);
 
     // Değer etiketlerini güncelle
-    document.getElementById("sinirVal").innerText = '%' + sinir;
     document.getElementById("stresVal").innerText = '%' + stres;
     document.getElementById("mutlulukVal").innerText = '%' + mutluluk;
 
     // Slider dolgu (fill) oranlarını CSS değişkenine ata
-    sinirRange.style.setProperty('--val', sinir + '%');
     stresRange.style.setProperty('--val', stres + '%');
     mutlulukRange.style.setProperty('--val', mutluluk + '%');
 
-    // === DUYGU ALGORİTMASI ===
-    let selectedId = "img-zen"; // Varsayılan: Dengeli / Zen
+    // === DİNAMİK IŞIN KILICI RENGİ (SİNİR -> MUTLULUK) ===
+    // 0 = Kırmızı, 50 = Mor, 100 = Yeşil
+    let bladeColor = "";
+    let bladeGlow = "";
+    if (mutluluk < 40) {
+        bladeColor = "#ff0000"; // Sith Kırmızısı
+        bladeGlow = "rgba(255, 0, 0, 0.8)";
+    } else if (mutluluk <= 60) {
+        bladeColor = "#b366ff"; // Denge Moru
+        bladeGlow = "rgba(179, 102, 255, 0.8)";
+    } else {
+        bladeColor = "#00ff00"; // Jedi Yeşili
+        bladeGlow = "rgba(0, 255, 0, 0.8)";
+    }
+    
+    // Mutluluk barının rengini ez (saber-purple class'ını dinamikleştir)
+    mutlulukRange.parentElement.style.setProperty('--blade-color', bladeColor);
+    mutlulukRange.parentElement.style.setProperty('--blade-glow', bladeGlow);
 
-    if (sinir >= 70) {
-        selectedId = "img-angry"; // Sith Ahtapot
-    } 
-    else if (stres >= 70) {
-        selectedId = "img-stressed"; // Yorgun/Stresli Ahtapot
-    }
-    else if (mutluluk >= 70 && sinir < 40 && stres < 40) {
-        selectedId = "img-jedi"; // Süper Mutlu Jedi Ahtapot
-    }
-    else if (mutluluk >= 40 && sinir < 50 && stres < 50) {
-        selectedId = "img-happy"; // Normal Mutlu (Pembe) Ahtapot
-    }
-    else {
-        selectedId = "img-zen"; // Karışık veya Dengeli Durum
+
+    // === DUYGU ALGORİTMASI ===
+    let selectedId = "img-zen"; // Varsayılan
+
+    if (stres > 70) {
+        selectedId = "img-stressed"; // Yorgun/Stresli
+    } else {
+        if (mutluluk <= 10) {
+            selectedId = "img-furious"; // Patlamaya Hazır (0-10)
+        } else if (mutluluk > 10 && mutluluk <= 40) {
+            selectedId = "img-angry"; // Sinirli (11-40)
+        } else if (mutluluk > 40 && mutluluk <= 60) {
+            selectedId = "img-zen"; // Dengeli (41-60)
+        } else if (mutluluk > 60 && mutluluk < 90) {
+            selectedId = "img-happy"; // Mutlu (61-89)
+        } else if (mutluluk >= 90) {
+            selectedId = "img-ecstatic"; // Aşırı Mutlu, Kalpli (90-100)
+        }
     }
 
     // Aktif resmi değiştir
@@ -80,7 +93,6 @@ function updateUIVisuals() {
     });
 }
 
-// Sayfa yüklendiğinde ilk görsel güncellemeleri yap
 window.onload = function() {
     updateUIVisuals();
 };

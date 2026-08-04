@@ -13,20 +13,18 @@ namespace emotion_meter.Hubs
             _context = context;
         }
 
-        public async Task UpdateMood(string userName, int sinir, int stres, int mutluluk)
+        public async Task UpdateMood(string userName, int stres, int mutluluk)
         {
-            // Veritabanını güncelle
-            var userMood = _context.MoodStates.FirstOrDefault(m => m.UserName == userName);
+            var userMood = await _context.MoodStates.FirstOrDefaultAsync(m => m.UserName == userName);
             if (userMood != null)
             {
-                userMood.Sinir = sinir;
                 userMood.Stres = stres;
                 userMood.Mutluluk = mutluluk;
                 await _context.SaveChangesAsync();
             }
 
-            // Diğer istemcilere (gönderen hariç) yeni durumu bildir
-            await Clients.Others.SendAsync("ReceiveMoodUpdate", userName, sinir, stres, mutluluk);
+            // Diğer istemcilere güncel veriyi gönder
+            await Clients.Others.SendAsync("ReceiveMoodUpdate", userName, stres, mutluluk);
         }
     }
 }

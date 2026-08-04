@@ -17,8 +17,8 @@ namespace emotion_meter.Data
             
             // Başlangıç verileri
             modelBuilder.Entity<MoodState>().HasData(
-                new MoodState { Id = 1, UserName = "Gülşah", Sinir = 0, Stres = 0, Mutluluk = 100 },
-                new MoodState { Id = 2, UserName = "Yunus Emre", Sinir = 0, Stres = 0, Mutluluk = 100 }
+                new MoodState { Id = 1, UserName = "Gülşah", Mutluluk = 100, Stres = 0 },
+                new MoodState { Id = 2, UserName = "Yunus Emre", Mutluluk = 100, Stres = 0 }
             );
         }
     }
