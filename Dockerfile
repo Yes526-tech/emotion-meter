@@ -23,5 +23,8 @@ COPY --from=publish /app/publish .
 
 # Render, ASP.NET Core uygulamalarını genellikle 8080 portundan dinler
 ENV ASPNETCORE_URLS=http://+:8080
+# inotify limit hatasını (Render'da sık görülür) önlemek için dosya izlemeyi kapat/değiştir
+ENV DOTNET_USE_POLLING_FILE_WATCHER=true
+ENV ASPNETCORE_hostBuilder__reloadConfigOnChange=false
 
 ENTRYPOINT ["dotnet", "emotion_meter.dll"]
