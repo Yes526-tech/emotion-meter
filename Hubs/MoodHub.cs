@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using emotion_meter.Data;
 using emotion_meter.Models;
 
