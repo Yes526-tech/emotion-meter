@@ -1,53 +1,313 @@
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700&display=swap');
+
 body {
-    background-color: #0d1117;
-    background-image: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+    background-color: #0b1320;
+    background-image: radial-gradient(circle at center, #112035 0%, #060a12 100%);
     color: #ffffff;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Jost', sans-serif;
     min-height: 100vh;
     display: flex;
+    justify-content: center;
     align-items: center;
+    margin: 0;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
 }
+
+/* Yıdızlar ve Uzay Arka Planı */
 .stars {
     background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat top center;
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.8;
 }
-.glass-card {
-    background: rgba(25, 33, 44, 0.7);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(10px);
-    padding: 30px;
-    margin-bottom: 20px;
-}
-.neon-text-pink {
-    color: #ff66cc;
-    text-shadow: 0 0 10px #ff66cc, 0 0 20px #ff66cc;
-}
-.neon-text-blue {
-    color: #33ccff;
-    text-shadow: 0 0 10px #33ccff, 0 0 20px #33ccff;
-}
-.form-range::-webkit-slider-thumb {
-    background: #fff;
-    box-shadow: 0 0 10px #fff;
-}
-/* Özel Slider Renkleri */
-.sinir-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #550000, #ff0000) !important; }
-.stres-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #553300, #ff9900) !important; }
-.mutluluk-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #330055, #9900ff) !important; }
 
-.octopus-container {
-    font-size: 5rem;
-    text-align: center;
-    min-height: 150px;
+/* Gezegenler / Ölüm Yıldızı Efekti (Basit CSS) */
+.planet {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+    z-index: -1;
+}
+.planet-1 {
+    width: 60px; height: 60px;
+    background: radial-gradient(circle at 30% 30%, #555, #111);
+    top: 20%; right: 10%;
+    box-shadow: inset -10px -10px 20px rgba(0,0,0,0.8);
+}
+.planet-2 {
+    width: 40px; height: 20px;
+    background: #444;
+    border-radius: 20px;
+    bottom: 25%; left: 15%;
+    transform: rotate(-15deg);
+    opacity: 0.4;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Üst Başlık Barı */
+.header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+}
+
+.logo-section {
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+    gap: 10px;
 }
-.saber-glow-red { text-shadow: 0 0 20px red, 0 0 40px red; }
-.saber-glow-purple { text-shadow: 0 0 20px purple, 0 0 40px purple; }
+.logo-icon {
+    font-size: 1.5rem;
+    color: #ff66cc;
+}
+.title-text {
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+.profile-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.profile-btn:hover { background: rgba(255, 255, 255, 0.2); }
+
+/* Ana Kart */
+.glass-card {
+    background: rgba(13, 22, 38, 0.6);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(15px);
+    padding: 20px;
+    position: relative;
+}
+
+.share-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: none;
+    color: #ccc;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Görsel Alanı (Ahtapotlar) */
+.visual-area {
+    position: relative;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    perspective: 1000px;
+}
+
+.octopus-img {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    transition: all 0.5s ease;
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+.octopus-happy {
+    transform: rotateY(0deg);
+}
+.octopus-angry {
+    transform: rotateY(180deg);
+}
+
+.visual-area.is-angry .octopus-happy { transform: rotateY(-180deg); }
+.visual-area.is-angry .octopus-angry { transform: rotateY(0deg); }
+
+
+.cevir-text {
+    position: absolute;
+    font-size: 2rem;
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+    letter-spacing: 2px;
+    z-index: 10;
+    top: 45%;
+    text-shadow: 0 0 15px rgba(255,255,255,0.3);
+    pointer-events: none;
+}
+
+/* Slider Kontrolleri */
+.controls-section {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.slider-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.slider-label {
+    font-weight: 600;
+    font-size: 1.1rem;
+    width: 90px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.slider-wrapper {
+    flex-grow: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.slider-value {
+    width: 45px;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #aaa;
+}
+
+/* Özel Range Input */
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+}
+input[type=range]:focus {
+    outline: none;
+}
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 8px;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+}
+
+/* Özel Renkler ve Gradientler */
+.sinir-range::-webkit-slider-runnable-track {
+    background: #1a2a40; /* Koyu zemin */
+}
+.stres-range::-webkit-slider-runnable-track {
+    background: #1a2a40;
+}
+.mutluluk-range::-webkit-slider-runnable-track {
+    background: #1a2a40;
+}
+
+/* Dolgu (Fill) efekti için CSS Variables kullanacağız */
+.sinir-range {
+    background: linear-gradient(to right, #ff3333 var(--val, 0%), #1a2a40 var(--val, 0%)) !important;
+    border-radius: 10px;
+    height: 8px;
+    -webkit-appearance: none;
+}
+.stres-range {
+    background: linear-gradient(to right, #ffb84d var(--val, 0%), #1a2a40 var(--val, 0%)) !important;
+    border-radius: 10px;
+    height: 8px;
+    -webkit-appearance: none;
+}
+.mutluluk-range {
+    background: linear-gradient(to right, #b366ff var(--val, 0%), #1a2a40 var(--val, 0%)) !important;
+    border-radius: 10px;
+    height: 8px;
+    -webkit-appearance: none;
+}
+
+/* Custom Thumbs (İkonlar) */
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    margin-top: -11px; /* (Track height / 2) - (Thumb height / 2) */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border: none;
+}
+
+.sinir-range::-webkit-slider-thumb {
+    /* Sith / Kızgın ikon (Emoji kullanarak SVG veya doğrudan emoji) */
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><text x='0' y='22' font-size='22'>👹</text></svg>");
+    filter: drop-shadow(0 0 5px red);
+}
+.stres-range::-webkit-slider-thumb {
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><text x='0' y='22' font-size='22'>☁️</text></svg>");
+    filter: drop-shadow(0 0 5px orange);
+}
+.mutluluk-range::-webkit-slider-thumb {
+    background-color: transparent;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><text x='0' y='22' font-size='22'>💜</text></svg>");
+    filter: drop-shadow(0 0 5px #b366ff);
+}
+
+/* User Switcher */
+.user-switch {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+.switch-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.switch-btn.active {
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 500px) {
+    .glass-card { padding: 15px; }
+    .slider-label { font-size: 0.9rem; width: 75px; }
+    .octopus-img { width: 200px; height: 200px; }
+    .cevir-text { font-size: 1.5rem; }
+}

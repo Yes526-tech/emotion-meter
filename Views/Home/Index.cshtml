@@ -4,66 +4,96 @@
     var yunus = Model.FirstOrDefault(m => m.UserName == "Yunus Emre");
 }
 
-<div class="row">
-    <!-- Gülşah'ın Paneli -->
-    <div class="col-md-6">
-        <div class="glass-card">
-            <h3 class="text-center neon-text-pink mb-4">Gülşah</h3>
-            
-            <div class="octopus-container" id="gulsahOctopus">
-                🐙💜
-            </div>
+<div class="planet planet-1"></div>
+<div class="planet planet-2"></div>
 
-            <div class="mb-3">
-                <label class="form-label d-flex justify-content-between">
-                    <span>Sinir 😡</span> <span id="gulsahSinirVal">%@(gulsah?.Sinir ?? 0)</span>
-                </label>
-                <input type="range" class="form-range sinir-range" id="gulsahSinirRange" value="@(gulsah?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+<div class="app-container">
+    
+    <div class="glass-card">
+        
+        <div class="header-bar">
+            <div class="logo-section">
+                <span class="logo-icon">🐙</span>
+                <h2 class="title-text" id="mainTitle">GÜLŞAH'IN DUYGU METRESİ</h2>
             </div>
-            <div class="mb-3">
-                <label class="form-label d-flex justify-content-between">
-                    <span>Stres 🤯</span> <span id="gulsahStresVal">%@(gulsah?.Stres ?? 0)</span>
-                </label>
-                <input type="range" class="form-range stres-range" id="gulsahStresRange" value="@(gulsah?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+            <button class="profile-btn">
+                👤 Profile
+            </button>
+        </div>
+        
+        <button class="share-btn">
+            🔗 Share
+        </button>
+
+        <!-- Ahtapot Görsel Alanı -->
+        <div class="visual-area" id="visualArea">
+            <div class="cevir-text">ÇEVİR 🔄</div>
+            <img src="~/images/happy_octopus.png" alt="Happy Octopus" class="octopus-img octopus-happy" />
+            <img src="~/images/angry_octopus.png" alt="Angry Octopus" class="octopus-img octopus-angry" />
+        </div>
+
+        <!-- Gülşah Kontrolleri -->
+        <div class="controls-section" id="panel-gulsah">
+            <div class="slider-group">
+                <span class="slider-label">SİNİR</span>
+                <div class="slider-wrapper">
+                    <input type="range" class="sinir-range" id="gulsahSinirRange" value="@(gulsah?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+                </div>
+                <span class="slider-value" id="gulsahSinirVal">%@(gulsah?.Sinir ?? 0)</span>
             </div>
-            <div class="mb-3">
-                <label class="form-label d-flex justify-content-between">
-                    <span>Mutluluk 🥰</span> <span id="gulsahMutlulukVal">%@(gulsah?.Mutluluk ?? 100)</span>
-                </label>
-                <input type="range" class="form-range mutluluk-range" id="gulsahMutlulukRange" value="@(gulsah?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+            
+            <div class="slider-group">
+                <span class="slider-label">STRES</span>
+                <div class="slider-wrapper">
+                    <input type="range" class="stres-range" id="gulsahStresRange" value="@(gulsah?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+                </div>
+                <span class="slider-value" id="gulsahStresVal">%@(gulsah?.Stres ?? 0)</span>
+            </div>
+            
+            <div class="slider-group">
+                <span class="slider-label">MUTLULUK</span>
+                <div class="slider-wrapper">
+                    <input type="range" class="mutluluk-range" id="gulsahMutlulukRange" value="@(gulsah?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+                </div>
+                <span class="slider-value" id="gulsahMutlulukVal">%@(gulsah?.Mutluluk ?? 100)</span>
             </div>
         </div>
-    </div>
 
-    <!-- Yunus Emre'nin Paneli -->
-    <div class="col-md-6">
-        <div class="glass-card">
-            <h3 class="text-center neon-text-blue mb-4">Yunus Emre</h3>
+        <!-- Yunus Emre Kontrolleri -->
+        <div class="controls-section" id="panel-yunus" style="display:none;">
+            <div class="slider-group">
+                <span class="slider-label">SİNİR</span>
+                <div class="slider-wrapper">
+                    <input type="range" class="sinir-range" id="yunusSinirRange" value="@(yunus?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
+                </div>
+                <span class="slider-value" id="yunusSinirVal">%@(yunus?.Sinir ?? 0)</span>
+            </div>
             
-            <div class="octopus-container" id="yunusOctopus">
-                🐙💙
+            <div class="slider-group">
+                <span class="slider-label">STRES</span>
+                <div class="slider-wrapper">
+                    <input type="range" class="stres-range" id="yunusStresRange" value="@(yunus?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
+                </div>
+                <span class="slider-value" id="yunusStresVal">%@(yunus?.Stres ?? 0)</span>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label d-flex justify-content-between">
-                    <span>Sinir 😡</span> <span id="yunusSinirVal">%@(yunus?.Sinir ?? 0)</span>
-                </label>
-                <input type="range" class="form-range sinir-range" id="yunusSinirRange" value="@(yunus?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
-            </div>
-            <div class="mb-3">
-                <label class="form-label d-flex justify-content-between">
-                    <span>Stres 🤯</span> <span id="yunusStresVal">%@(yunus?.Stres ?? 0)</span>
-                </label>
-                <input type="range" class="form-range stres-range" id="yunusStresRange" value="@(yunus?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
-            </div>
-            <div class="mb-3">
-                <label class="form-label d-flex justify-content-between">
-                    <span>Mutluluk 🥰</span> <span id="yunusMutlulukVal">%@(yunus?.Mutluluk ?? 100)</span>
-                </label>
-                <input type="range" class="form-range mutluluk-range" id="yunusMutlulukRange" value="@(yunus?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
+            
+            <div class="slider-group">
+                <span class="slider-label">MUTLULUK</span>
+                <div class="slider-wrapper">
+                    <input type="range" class="mutluluk-range" id="yunusMutlulukRange" value="@(yunus?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
+                </div>
+                <span class="slider-value" id="yunusMutlulukVal">%@(yunus?.Mutluluk ?? 100)</span>
             </div>
         </div>
+
     </div>
+
+    <!-- Kullanıcı Değiştirme Butonları -->
+    <div class="user-switch">
+        <button class="switch-btn active" id="btn-gulsah" onclick="switchUser('Gülşah')">Gülşah'ın Paneli</button>
+        <button class="switch-btn" id="btn-yunus" onclick="switchUser('Yunus Emre')">Yunus Emre'nin Paneli</button>
+    </div>
+
 </div>
 
 @section Scripts {
