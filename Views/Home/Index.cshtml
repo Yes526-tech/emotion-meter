@@ -1,99 +1,71 @@
 @model IEnumerable<emotion_meter.Models.MoodState>
 @{
     var gulsah = Model.FirstOrDefault(m => m.UserName == "Gülşah");
-    var yunus = Model.FirstOrDefault(m => m.UserName == "Yunus Emre");
 }
 
 <div class="planet planet-1"></div>
 <div class="planet planet-2"></div>
+<div class="stars"></div>
 
-<div class="app-container">
+<div class="mobile-app-container">
     
-    <div class="glass-card">
-        
-        <div class="header-bar">
-            <div class="logo-section">
-                <span class="logo-icon">🐙</span>
-                <h2 class="title-text" id="mainTitle">GÜLŞAH'IN DUYGU METRESİ</h2>
+    <!-- Üst Başlık Barı -->
+    <div class="header-bar">
+        <div class="logo-section">
+            <span class="logo-icon">🐙</span>
+            <div class="title-text-group">
+                <span class="subtitle">GÜLŞAH CUSTOM</span>
+                <h2 class="title-text">GÜLŞAH'IN DUYGU METRESİ</h2>
             </div>
-            <button class="profile-btn">
-                👤 Profile
-            </button>
         </div>
-        
+        <button class="profile-btn">
+            👤 Profile
+        </button>
+    </div>
+    
+    <!-- Ana Kart -->
+    <div class="glass-card">
         <button class="share-btn">
             🔗 Share
         </button>
 
         <!-- Ahtapot Görsel Alanı -->
         <div class="visual-area" id="visualArea">
-            <div class="cevir-text">ÇEVİR 🔄</div>
-            <img src="~/images/happy_octopus.png" alt="Happy Octopus" class="octopus-img octopus-happy" />
-            <img src="~/images/angry_octopus.png" alt="Angry Octopus" class="octopus-img octopus-angry" />
+            <!-- 5 Ana Resim (Yalnızca Biri Görünecek) -->
+            <img src="~/images/happy_octopus.png" id="img-happy" class="octopus-img active-img" />
+            <img src="~/images/angry_octopus.png" id="img-angry" class="octopus-img" />
+            <img src="~/images/jedi_octopus.png" id="img-jedi" class="octopus-img" />
+            <img src="~/images/stressed_octopus.png" id="img-stressed" class="octopus-img" />
+            <img src="~/images/zen_octopus.png" id="img-zen" class="octopus-img" />
         </div>
 
-        <!-- Gülşah Kontrolleri -->
-        <div class="controls-section" id="panel-gulsah">
+        <!-- Kontroller -->
+        <div class="controls-section">
             <div class="slider-group">
-                <span class="slider-label">SİNİR</span>
-                <div class="slider-wrapper">
-                    <input type="range" class="sinir-range" id="gulsahSinirRange" value="@(gulsah?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+                <span class="slider-label">SİNİR <span class="label-icon">👹</span></span>
+                <div class="slider-wrapper lightsaber-wrapper saber-red">
+                    <input type="range" class="saber-range" id="sinirRange" value="@(gulsah?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate()">
                 </div>
-                <span class="slider-value" id="gulsahSinirVal">%@(gulsah?.Sinir ?? 0)</span>
+                <span class="slider-value" id="sinirVal">%@(gulsah?.Sinir ?? 0)</span>
             </div>
             
             <div class="slider-group">
-                <span class="slider-label">STRES</span>
-                <div class="slider-wrapper">
-                    <input type="range" class="stres-range" id="gulsahStresRange" value="@(gulsah?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+                <span class="slider-label">STRES <span class="label-icon">☁️</span></span>
+                <div class="slider-wrapper lightsaber-wrapper saber-yellow">
+                    <input type="range" class="saber-range" id="stresRange" value="@(gulsah?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate()">
                 </div>
-                <span class="slider-value" id="gulsahStresVal">%@(gulsah?.Stres ?? 0)</span>
+                <span class="slider-value" id="stresVal">%@(gulsah?.Stres ?? 0)</span>
             </div>
             
             <div class="slider-group">
-                <span class="slider-label">MUTLULUK</span>
-                <div class="slider-wrapper">
-                    <input type="range" class="mutluluk-range" id="gulsahMutlulukRange" value="@(gulsah?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+                <span class="slider-label">MUTLULUK <span class="label-icon">💜</span></span>
+                <div class="slider-wrapper lightsaber-wrapper saber-purple">
+                    <input type="range" class="saber-range" id="mutlulukRange" value="@(gulsah?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate()">
                 </div>
-                <span class="slider-value" id="gulsahMutlulukVal">%@(gulsah?.Mutluluk ?? 100)</span>
+                <span class="slider-value" id="mutlulukVal">%@(gulsah?.Mutluluk ?? 100)</span>
             </div>
         </div>
-
-        <!-- Yunus Emre Kontrolleri -->
-        <div class="controls-section" id="panel-yunus" style="display:none;">
-            <div class="slider-group">
-                <span class="slider-label">SİNİR</span>
-                <div class="slider-wrapper">
-                    <input type="range" class="sinir-range" id="yunusSinirRange" value="@(yunus?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
-                </div>
-                <span class="slider-value" id="yunusSinirVal">%@(yunus?.Sinir ?? 0)</span>
-            </div>
-            
-            <div class="slider-group">
-                <span class="slider-label">STRES</span>
-                <div class="slider-wrapper">
-                    <input type="range" class="stres-range" id="yunusStresRange" value="@(yunus?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
-                </div>
-                <span class="slider-value" id="yunusStresVal">%@(yunus?.Stres ?? 0)</span>
-            </div>
-            
-            <div class="slider-group">
-                <span class="slider-label">MUTLULUK</span>
-                <div class="slider-wrapper">
-                    <input type="range" class="mutluluk-range" id="yunusMutlulukRange" value="@(yunus?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
-                </div>
-                <span class="slider-value" id="yunusMutlulukVal">%@(yunus?.Mutluluk ?? 100)</span>
-            </div>
-        </div>
-
     </div>
-
-    <!-- Kullanıcı Değiştirme Butonları -->
-    <div class="user-switch">
-        <button class="switch-btn active" id="btn-gulsah" onclick="switchUser('Gülşah')">Gülşah'ın Paneli</button>
-        <button class="switch-btn" id="btn-yunus" onclick="switchUser('Yunus Emre')">Yunus Emre'nin Paneli</button>
-    </div>
-
 </div>
 
 @section Scripts {

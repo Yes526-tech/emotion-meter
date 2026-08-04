@@ -10,12 +10,12 @@ body {
     justify-content: center;
     align-items: center;
     margin: 0;
-    padding: 20px;
+    padding: 0;
     position: relative;
     overflow-x: hidden;
 }
 
-/* Yıdızlar ve Uzay Arka Planı */
+/* Yıldızlar ve Uzay Arka Planı */
 .stars {
     background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat top center;
     position: absolute;
@@ -24,7 +24,7 @@ body {
     opacity: 0.8;
 }
 
-/* Gezegenler / Ölüm Yıldızı Efekti (Basit CSS) */
+/* Gezegenler / Ölüm Yıldızı Efekti */
 .planet {
     position: absolute;
     border-radius: 50%;
@@ -34,24 +34,28 @@ body {
 .planet-1 {
     width: 60px; height: 60px;
     background: radial-gradient(circle at 30% 30%, #555, #111);
-    top: 20%; right: 10%;
+    top: 20%; right: 5%;
     box-shadow: inset -10px -10px 20px rgba(0,0,0,0.8);
 }
 .planet-2 {
     width: 40px; height: 20px;
     background: #444;
     border-radius: 20px;
-    bottom: 25%; left: 15%;
+    bottom: 15%; left: 10%;
     transform: rotate(-15deg);
     opacity: 0.4;
 }
 
-.app-container {
+/* Mobil Uygulama Kapsayıcısı */
+.mobile-app-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 420px;
+    height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    padding: 10px;
+    box-sizing: border-box;
+    position: relative;
 }
 
 /* Üst Başlık Barı */
@@ -59,7 +63,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 15px;
+    padding: 15px 10px;
+    margin-bottom: 10px;
 }
 
 .logo-section {
@@ -68,8 +73,19 @@ body {
     gap: 10px;
 }
 .logo-icon {
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: #ff66cc;
+}
+.title-text-group {
+    display: flex;
+    flex-direction: column;
+}
+.subtitle {
+    font-size: 0.6rem;
+    color: #33ccff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
 }
 .title-text {
     font-weight: 700;
@@ -84,15 +100,14 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
     padding: 6px 15px;
-    border-radius: 20px;
-    font-size: 0.9rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 5px;
     cursor: pointer;
-    transition: all 0.2s;
 }
-.profile-btn:hover { background: rgba(255, 255, 255, 0.2); }
 
 /* Ana Kart */
 .glass-card {
@@ -103,6 +118,9 @@ body {
     backdrop-filter: blur(15px);
     padding: 20px;
     position: relative;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .share-btn {
@@ -113,22 +131,24 @@ body {
     border: none;
     color: #ccc;
     padding: 5px 12px;
-    border-radius: 15px;
+    border-radius: 8px;
     font-size: 0.8rem;
     display: flex;
     align-items: center;
     gap: 5px;
+    z-index: 10;
 }
 
 /* Görsel Alanı (Ahtapotlar) */
 .visual-area {
     position: relative;
-    height: 350px;
+    flex-grow: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
-    perspective: 1000px;
+    margin-top: 20px;
+    min-height: 250px;
 }
 
 .octopus-img {
@@ -136,178 +156,143 @@ body {
     height: 250px;
     object-fit: cover;
     border-radius: 20px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.8);
-    transition: all 0.5s ease;
     position: absolute;
-    backface-visibility: hidden;
-}
-
-.octopus-happy {
-    transform: rotateY(0deg);
-}
-.octopus-angry {
-    transform: rotateY(180deg);
-}
-
-.visual-area.is-angry .octopus-happy { transform: rotateY(-180deg); }
-.visual-area.is-angry .octopus-angry { transform: rotateY(0deg); }
-
-
-.cevir-text {
-    position: absolute;
-    font-size: 2rem;
-    font-weight: 700;
-    color: transparent;
-    -webkit-text-stroke: 1px #fff;
-    letter-spacing: 2px;
-    z-index: 10;
-    top: 45%;
-    text-shadow: 0 0 15px rgba(255,255,255,0.3);
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 40px rgba(0,0,0,0.8);
     pointer-events: none;
 }
+
+.octopus-img.active-img {
+    opacity: 1;
+    transform: scale(1);
+}
+
 
 /* Slider Kontrolleri */
 .controls-section {
     display: flex;
     flex-direction: column;
-    gap: 25px;
-    padding-top: 15px;
-    border-top: 1px solid rgba(255,255,255,0.1);
+    gap: 30px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
 }
 
 .slider-group {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
 }
 
 .slider-label {
-    font-weight: 600;
-    font-size: 1.1rem;
-    width: 90px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    width: 95px;
     text-transform: uppercase;
     letter-spacing: 1px;
     margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.label-icon {
+    font-size: 1.1rem;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
 }
 
-.slider-wrapper {
+.slider-value {
+    width: 40px;
+    text-align: right;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #ccc;
+}
+
+/* Lightsaber Wrapper */
+.lightsaber-wrapper {
     flex-grow: 1;
     position: relative;
     display: flex;
     align-items: center;
-}
-
-.slider-value {
-    width: 45px;
-    text-align: right;
-    font-size: 1rem;
-    font-weight: 600;
-    color: #aaa;
+    height: 30px; /* Thumb kabza için yeterli yükseklik */
 }
 
 /* Özel Range Input */
-input[type=range] {
+input[type=range].saber-range {
     -webkit-appearance: none;
     width: 100%;
     background: transparent;
+    position: relative;
+    z-index: 2;
+    margin: 0;
+    height: 100%;
 }
-input[type=range]:focus {
+input[type=range].saber-range:focus {
     outline: none;
 }
-input[type=range]::-webkit-slider-runnable-track {
+
+/* Track arka planı (Sönük Kılıç Tipi) */
+input[type=range].saber-range::-webkit-slider-runnable-track {
     width: 100%;
-    height: 8px;
+    height: 6px;
     cursor: pointer;
-    border-radius: 10px;
-    border: none;
+    border-radius: 3px;
+    background: #111;
+    box-shadow: inset 0 0 2px #000;
+    border: 1px solid #222;
 }
 
-/* Özel Renkler ve Gradientler */
-.sinir-range::-webkit-slider-runnable-track {
-    background: #1a2a40; /* Koyu zemin */
-}
-.stres-range::-webkit-slider-runnable-track {
-    background: #1a2a40;
-}
-.mutluluk-range::-webkit-slider-runnable-track {
-    background: #1a2a40;
-}
-
-/* Dolgu (Fill) efekti için CSS Variables kullanacağız */
-.sinir-range {
-    background: linear-gradient(to right, #ff3333 var(--val, 0%), #1a2a40 var(--val, 0%)) !important;
-    border-radius: 10px;
-    height: 8px;
+/* Kabza (Hilt) Tasarımı (CSS çizimi) */
+input[type=range].saber-range::-webkit-slider-thumb {
     -webkit-appearance: none;
-}
-.stres-range {
-    background: linear-gradient(to right, #ffb84d var(--val, 0%), #1a2a40 var(--val, 0%)) !important;
-    border-radius: 10px;
-    height: 8px;
-    -webkit-appearance: none;
-}
-.mutluluk-range {
-    background: linear-gradient(to right, #b366ff var(--val, 0%), #1a2a40 var(--val, 0%)) !important;
-    border-radius: 10px;
-    height: 8px;
-    -webkit-appearance: none;
-}
-
-/* Custom Thumbs (İkonlar) */
-input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
-    background-size: cover;
-    background-position: center;
+    height: 24px;
+    width: 14px;
+    border-radius: 2px;
+    background: linear-gradient(to right, #ccc, #fff 40%, #888 100%);
     cursor: pointer;
-    margin-top: -11px; /* (Track height / 2) - (Thumb height / 2) */
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    border: none;
+    margin-top: -10px; /* Track ortalanması için */
+    box-shadow: -2px 0 5px rgba(0,0,0,0.8), inset 0 2px 2px rgba(255,255,255,0.8);
+    border-left: 2px solid #333;
+    border-right: 2px solid #222;
+    position: relative;
+    z-index: 3;
+}
+/* Kabzanın üzerindeki çizgiler için pseudo-element kullanamıyoruz, o yüzden background pattern: */
+input[type=range].saber-range::-webkit-slider-thumb {
+    background-image: repeating-linear-gradient(to bottom, transparent, transparent 3px, rgba(0,0,0,0.5) 3px, rgba(0,0,0,0.5) 5px);
 }
 
-.sinir-range::-webkit-slider-thumb {
-    /* Sith / Kızgın ikon (Emoji kullanarak SVG veya doğrudan emoji) */
-    background-color: transparent;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><text x='0' y='22' font-size='22'>👹</text></svg>");
-    filter: drop-shadow(0 0 5px red);
+/* Renklendirmeler ve Işın Gölgeleri (CSS Variables & Pseudo Element yerine Gradient) */
+/* Barların altından neon glow efekti vermek için wrapper içine pseudo ekleyemiyoruz input olunca, o yüzden background kullanacağız */
+
+.saber-red input[type=range] {
+    --blade-color: #ff0000;
+    --blade-glow: rgba(255, 0, 0, 0.8);
 }
-.stres-range::-webkit-slider-thumb {
-    background-color: transparent;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><text x='0' y='22' font-size='22'>☁️</text></svg>");
-    filter: drop-shadow(0 0 5px orange);
+.saber-yellow input[type=range] {
+    --blade-color: #ffaa00;
+    --blade-glow: rgba(255, 170, 0, 0.8);
 }
-.mutluluk-range::-webkit-slider-thumb {
-    background-color: transparent;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='30' height='30'><text x='0' y='22' font-size='22'>💜</text></svg>");
-    filter: drop-shadow(0 0 5px #b366ff);
+.saber-purple input[type=range] {
+    --blade-color: #b366ff;
+    --blade-glow: rgba(179, 102, 255, 0.8);
 }
 
-/* User Switcher */
-.user-switch {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 20px;
-}
-.switch-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
-    padding: 8px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-.switch-btn.active {
-    background: rgba(255, 255, 255, 0.3);
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+/* Dolgu Kısmı */
+input[type=range].saber-range {
+    background: linear-gradient(to right, var(--blade-color) var(--val, 0%), transparent var(--val, 0%)) !important;
+    background-size: 100% 6px !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+    /* Glow effect on the track */
+    filter: drop-shadow(0 0 6px var(--blade-glow)) drop-shadow(0 0 12px var(--blade-glow));
 }
 
-@media (max-width: 500px) {
-    .glass-card { padding: 15px; }
-    .slider-label { font-size: 0.9rem; width: 75px; }
+@media (max-width: 400px) {
     .octopus-img { width: 200px; height: 200px; }
-    .cevir-text { font-size: 1.5rem; }
+    .slider-label { font-size: 0.85rem; width: 85px; }
+    .logo-icon { font-size: 1.5rem; }
+    .title-text { font-size: 0.95rem; }
 }

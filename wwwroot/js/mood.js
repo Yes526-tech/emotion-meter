@@ -7,95 +7,80 @@ connection.start().catch(function (err) {
     return console.error(err.toString());
 });
 
-let currentUser = "Gülşah"; // Varsayılan panel
-
-// Kullanıcı değiştirme
-window.switchUser = function(userName) {
-    currentUser = userName;
-    
-    // UI değiştirme
-    if(userName === "Gülşah") {
-        document.getElementById('panel-gulsah').style.display = 'flex';
-        document.getElementById('panel-yunus').style.display = 'none';
-        document.getElementById('mainTitle').innerText = "GÜLŞAH'IN DUYGU METRESİ";
-        
-        document.getElementById('btn-gulsah').classList.add('active');
-        document.getElementById('btn-yunus').classList.remove('active');
-    } else {
-        document.getElementById('panel-gulsah').style.display = 'none';
-        document.getElementById('panel-yunus').style.display = 'flex';
-        document.getElementById('mainTitle').innerText = "YUNUS EMRE'NİN DUYGU METRESİ";
-        
-        document.getElementById('btn-yunus').classList.add('active');
-        document.getElementById('btn-gulsah').classList.remove('active');
-    }
-
-    updateUIVisuals(userName);
-}
-
-// Diğer kullanıcıdan gelen veriyi al
+// Diğer cihazlardan (veya kendi cihazından tetiklenen) gelen veriyi al
 connection.on("ReceiveMoodUpdate", function (userName, sinir, stres, mutluluk) {
-    let prefix = userName === "Gülşah" ? "gulsah" : "yunus";
-    
-    document.getElementById(prefix + "SinirRange").value = sinir;
-    document.getElementById(prefix + "StresRange").value = stres;
-    document.getElementById(prefix + "MutlulukRange").value = mutluluk;
-    
-    // Sadece şu an o kişinin paneline bakıyorsak görseli döndür
-    if (userName === currentUser) {
-        updateUIVisuals(userName);
+    if (userName === "Gülşah") {
+        document.getElementById("sinirRange").value = sinir;
+        document.getElementById("stresRange").value = stres;
+        document.getElementById("mutlulukRange").value = mutluluk;
+        updateUIVisuals();
     }
 });
 
 // Kaydırıcı değiştiğinde sunucuya veri gönder
-window.sendMoodUpdate = function(userName) {
-    updateUIVisuals(userName);
+window.sendMoodUpdate = function() {
+    updateUIVisuals();
     
-    let prefix = userName === "Gülşah" ? "gulsah" : "yunus";
-    let sinir = document.getElementById(prefix + "SinirRange").value;
-    let stres = document.getElementById(prefix + "StresRange").value;
-    let mutluluk = document.getElementById(prefix + "MutlulukRange").value;
+    let sinir = document.getElementById("sinirRange").value;
+    let stres = document.getElementById("stresRange").value;
+    let mutluluk = document.getElementById("mutlulukRange").value;
 
-    connection.invoke("UpdateMood", userName, parseInt(sinir), parseInt(stres), parseInt(mutluluk))
+    connection.invoke("UpdateMood", "Gülşah", parseInt(sinir), parseInt(stres), parseInt(mutluluk))
               .catch(function (err) {
                   console.error(err.toString());
               });
 }
 
-// Değer etiketlerini ve animasyonları güncelle
-function updateUIVisuals(userName) {
-    let prefix = userName === "Gülşah" ? "gulsah" : "yunus";
+// Değer etiketlerini, ışın kılıcı dolgularını ve Ahtapot algoritmasını güncelle
+function updateUIVisuals() {
+    let sinirRange = document.getElementById("sinirRange");
+    let stresRange = document.getElementById("stresRange");
+    let mutlulukRange = document.getElementById("mutlulukRange");
     
-    let sinirRange = document.getElementById(prefix + "SinirRange");
-    let stresRange = document.getElementById(prefix + "StresRange");
-    let mutlulukRange = document.getElementById(prefix + "MutlulukRange");
-    
-    let sinir = sinirRange.value;
-    let stres = stresRange.value;
-    let mutluluk = mutlulukRange.value;
+    let sinir = parseInt(sinirRange.value);
+    let stres = parseInt(stresRange.value);
+    let mutluluk = parseInt(mutlulukRange.value);
 
     // Değer etiketlerini güncelle
-    document.getElementById(prefix + "SinirVal").innerText = '%' + sinir;
-    document.getElementById(prefix + "StresVal").innerText = '%' + stres;
-    document.getElementById(prefix + "MutlulukVal").innerText = '%' + mutluluk;
+    document.getElementById("sinirVal").innerText = '%' + sinir;
+    document.getElementById("stresVal").innerText = '%' + stres;
+    document.getElementById("mutlulukVal").innerText = '%' + mutluluk;
 
     // Slider dolgu (fill) oranlarını CSS değişkenine ata
     sinirRange.style.setProperty('--val', sinir + '%');
     stresRange.style.setProperty('--val', stres + '%');
     mutlulukRange.style.setProperty('--val', mutluluk + '%');
 
-    // Ahtapot çevirme (Flip) Animasyonu (Sinir 50'den büyükse kızgın ahtapot döner)
-    let visualArea = document.getElementById("visualArea");
-    if (parseInt(sinir) > 50 || parseInt(stres) > 70) {
-        visualArea.classList.add("is-angry");
-    } else {
-        visualArea.classList.remove("is-angry");
+    // === DUYGU ALGORİTMASI ===
+    let selectedId = "img-zen"; // Varsayılan: Dengeli / Zen
+
+    if (sinir >= 70) {
+        selectedId = "img-angry"; // Sith Ahtapot
+    } 
+    else if (stres >= 70) {
+        selectedId = "img-stressed"; // Yorgun/Stresli Ahtapot
     }
+    else if (mutluluk >= 70 && sinir < 40 && stres < 40) {
+        selectedId = "img-jedi"; // Süper Mutlu Jedi Ahtapot
+    }
+    else if (mutluluk >= 40 && sinir < 50 && stres < 50) {
+        selectedId = "img-happy"; // Normal Mutlu (Pembe) Ahtapot
+    }
+    else {
+        selectedId = "img-zen"; // Karışık veya Dengeli Durum
+    }
+
+    // Aktif resmi değiştir
+    document.querySelectorAll('.octopus-img').forEach(img => {
+        if (img.id === selectedId) {
+            img.classList.add('active-img');
+        } else {
+            img.classList.remove('active-img');
+        }
+    });
 }
 
 // Sayfa yüklendiğinde ilk görsel güncellemeleri yap
 window.onload = function() {
-    updateUIVisuals("Gülşah");
-    updateUIVisuals("Yunus Emre");
-    switchUser("Gülşah");
+    updateUIVisuals();
 };
