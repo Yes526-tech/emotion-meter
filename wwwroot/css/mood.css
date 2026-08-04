@@ -1,0 +1,53 @@
+body {
+    background-color: #0d1117;
+    background-image: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+}
+.stars {
+    background: transparent url('https://www.transparenttextures.com/patterns/stardust.png') repeat top center;
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: -1;
+    opacity: 0.5;
+}
+.glass-card {
+    background: rgba(25, 33, 44, 0.7);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    margin-bottom: 20px;
+}
+.neon-text-pink {
+    color: #ff66cc;
+    text-shadow: 0 0 10px #ff66cc, 0 0 20px #ff66cc;
+}
+.neon-text-blue {
+    color: #33ccff;
+    text-shadow: 0 0 10px #33ccff, 0 0 20px #33ccff;
+}
+.form-range::-webkit-slider-thumb {
+    background: #fff;
+    box-shadow: 0 0 10px #fff;
+}
+/* Özel Slider Renkleri */
+.sinir-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #550000, #ff0000) !important; }
+.stres-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #553300, #ff9900) !important; }
+.mutluluk-range::-webkit-slider-runnable-track { background: linear-gradient(90deg, #330055, #9900ff) !important; }
+
+.octopus-container {
+    font-size: 5rem;
+    text-align: center;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+.saber-glow-red { text-shadow: 0 0 20px red, 0 0 40px red; }
+.saber-glow-purple { text-shadow: 0 0 20px purple, 0 0 40px purple; }

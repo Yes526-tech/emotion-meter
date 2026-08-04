@@ -1,0 +1,71 @@
+@model IEnumerable<emotion_meter.Models.MoodState>
+@{
+    var gulsah = Model.FirstOrDefault(m => m.UserName == "Gülşah");
+    var yunus = Model.FirstOrDefault(m => m.UserName == "Yunus Emre");
+}
+
+<div class="row">
+    <!-- Gülşah'ın Paneli -->
+    <div class="col-md-6">
+        <div class="glass-card">
+            <h3 class="text-center neon-text-pink mb-4">Gülşah</h3>
+            
+            <div class="octopus-container" id="gulsahOctopus">
+                🐙💜
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between">
+                    <span>Sinir 😡</span> <span id="gulsahSinirVal">%@(gulsah?.Sinir ?? 0)</span>
+                </label>
+                <input type="range" class="form-range sinir-range" id="gulsahSinirRange" value="@(gulsah?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+            </div>
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between">
+                    <span>Stres 🤯</span> <span id="gulsahStresVal">%@(gulsah?.Stres ?? 0)</span>
+                </label>
+                <input type="range" class="form-range stres-range" id="gulsahStresRange" value="@(gulsah?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+            </div>
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between">
+                    <span>Mutluluk 🥰</span> <span id="gulsahMutlulukVal">%@(gulsah?.Mutluluk ?? 100)</span>
+                </label>
+                <input type="range" class="form-range mutluluk-range" id="gulsahMutlulukRange" value="@(gulsah?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Gülşah')">
+            </div>
+        </div>
+    </div>
+
+    <!-- Yunus Emre'nin Paneli -->
+    <div class="col-md-6">
+        <div class="glass-card">
+            <h3 class="text-center neon-text-blue mb-4">Yunus Emre</h3>
+            
+            <div class="octopus-container" id="yunusOctopus">
+                🐙💙
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between">
+                    <span>Sinir 😡</span> <span id="yunusSinirVal">%@(yunus?.Sinir ?? 0)</span>
+                </label>
+                <input type="range" class="form-range sinir-range" id="yunusSinirRange" value="@(yunus?.Sinir ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
+            </div>
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between">
+                    <span>Stres 🤯</span> <span id="yunusStresVal">%@(yunus?.Stres ?? 0)</span>
+                </label>
+                <input type="range" class="form-range stres-range" id="yunusStresRange" value="@(yunus?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
+            </div>
+            <div class="mb-3">
+                <label class="form-label d-flex justify-content-between">
+                    <span>Mutluluk 🥰</span> <span id="yunusMutlulukVal">%@(yunus?.Mutluluk ?? 100)</span>
+                </label>
+                <input type="range" class="form-range mutluluk-range" id="yunusMutlulukRange" value="@(yunus?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate('Yunus Emre')">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/mood.js"></script>
+}
