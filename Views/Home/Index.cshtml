@@ -28,37 +28,28 @@
     <div class="glass-card">
 
 
-        <!-- Ahtapot Görsel Alanı -->
-        <div class="visual-area" id="visualArea">
-            <img src="~/images/jedi_octopus.png" id="main-octopus" class="octopus-img active-img" />
-        </div>
+        <!-- Gauge Gösterge Alanı -->
+        <div class="gauge-container" id="gaugeContainer">
+            <div class="gauge-wrapper">
+                <div class="gauge-bg"></div>
+                <div class="gauge-center-hole"></div>
+                <div class="gauge-needle" id="gaugeNeedle">
+                    <div class="needle-base"></div>
+                </div>
+                <!-- Yüz İfadeleri (Emojiler) -->
+                <div class="emoji-label e1">🤬</div>
+                <div class="emoji-label e2">😠</div>
+                <div class="emoji-label e3">😟</div>
+                <div class="emoji-label e4">🙂</div>
+                <div class="emoji-label e5">😄</div>
+                <div class="emoji-label e6">🥰</div>
+            </div>
+            
+            <h2 class="gauge-status-text" id="gaugeStatusText"></h2>
 
-        <!-- Kontroller -->
-        <div class="controls-section">
-            <div class="mood-grid">
-                <!-- ROW 1 -->
-                <button class="mood-btn btn-red" onclick="selectMood('furious', 0, 100)">Furious</button>
-                <button class="mood-btn btn-red" onclick="selectMood('nervous', 49, 100)">Nervous</button>
-                <button class="mood-btn btn-yellow" onclick="selectMood('cheerful', 51, 100)">Cheerful</button>
-                <button class="mood-btn btn-yellow" onclick="selectMood('ecstatic', 100, 100)">Ecstatic</button>
-
-                <!-- ROW 2 -->
-                <button class="mood-btn btn-red" onclick="selectMood('worried', 0, 51)">Worried</button>
-                <button class="mood-btn btn-red" onclick="selectMood('angry', 49, 51)">Angry</button>
-                <button class="mood-btn btn-yellow" onclick="selectMood('happy', 51, 51)">Happy</button>
-                <button class="mood-btn btn-yellow" onclick="selectMood('excited', 100, 51)">Excited</button>
-
-                <!-- ROW 3 -->
-                <button class="mood-btn btn-blue" onclick="selectMood('lonely', 0, 49)">Lonely</button>
-                <button class="mood-btn btn-blue" onclick="selectMood('sad', 49, 49)">Sad</button>
-                <button class="mood-btn btn-green" onclick="selectMood('ease', 51, 49)">At Ease</button>
-                <button class="mood-btn btn-green" onclick="selectMood('content', 100, 49)">Content</button>
-
-                <!-- ROW 4 -->
-                <button class="mood-btn btn-blue" onclick="selectMood('hopeless', 0, 0)">Hopeless</button>
-                <button class="mood-btn btn-blue" onclick="selectMood('disappointed', 49, 0)">Disappointed</button>
-                <button class="mood-btn btn-green" onclick="selectMood('calm', 51, 0)">Calm</button>
-                <button class="mood-btn btn-green" onclick="selectMood('serene', 100, 0)">Serene</button>
+            <div class="ai-message-box" id="aiMessageBox" style="display: none;">
+                <div class="ai-icon">💌</div>
+                <div class="ai-text" id="aiMessageText">Emre yazıyor...</div>
             </div>
         </div>
     </div>
