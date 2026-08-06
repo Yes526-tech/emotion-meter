@@ -3,9 +3,13 @@
     var gulsah = Model.FirstOrDefault(m => m.UserName == "Gülşah");
 }
 
-<div class="planet planet-1"></div>
-<div class="planet planet-2"></div>
-<div class="stars"></div>
+<div class="space-bg">
+    <div class="stars"></div>
+    <div class="meteor m1"></div>
+    <div class="meteor m2"></div>
+    <div class="ship xwing">🚀</div>
+    <div class="ship tiefighter">🛸</div>
+</div>
 
 <div class="mobile-app-container">
     
@@ -18,48 +22,44 @@
                 <h2 class="title-text">GÜLŞAH'IN DUYGU METRESİ</h2>
             </div>
         </div>
-        <button class="profile-btn">
-            👤 Profile
-        </button>
     </div>
     
     <!-- Ana Kart -->
     <div class="glass-card">
-        <button class="share-btn">
-            🔗 Share
-        </button>
+
 
         <!-- Ahtapot Görsel Alanı -->
         <div class="visual-area" id="visualArea">
-            <!-- 7 Ana Resim (Yalnızca Biri Görünecek) -->
-            <img src="~/images/furious_octopus.png" id="img-furious" class="octopus-img" />
-            <img src="~/images/angry_octopus.png" id="img-angry" class="octopus-img" />
-            <img src="~/images/zen_octopus.png" id="img-zen" class="octopus-img" />
-            <img src="~/images/happy_octopus.png" id="img-happy" class="octopus-img" />
-            <img src="~/images/jedi_octopus.png" id="img-jedi" class="octopus-img" />
-            <img src="~/images/ecstatic_octopus.png" id="img-ecstatic" class="octopus-img" />
-            <img src="~/images/stressed_octopus.png" id="img-stressed" class="octopus-img" />
+            <img src="~/images/jedi_octopus.png" id="main-octopus" class="octopus-img active-img" />
         </div>
 
         <!-- Kontroller -->
         <div class="controls-section">
-            
-            <div class="slider-group">
-                <span class="slider-label">MUTLULUK <span class="label-icon">🎭</span></span>
-                <div class="slider-wrapper lightsaber-wrapper saber-purple">
-                    <input type="range" class="saber-range" id="mutlulukRange" value="@(gulsah?.Mutluluk ?? 100)" min="0" max="100" oninput="sendMoodUpdate()">
-                </div>
-                <span class="slider-value" id="mutlulukVal">%@(gulsah?.Mutluluk ?? 100)</span>
-            </div>
+            <div class="mood-grid">
+                <!-- ROW 1 -->
+                <button class="mood-btn btn-red" onclick="selectMood('furious', 0, 100)">Furious</button>
+                <button class="mood-btn btn-red" onclick="selectMood('nervous', 49, 100)">Nervous</button>
+                <button class="mood-btn btn-yellow" onclick="selectMood('cheerful', 51, 100)">Cheerful</button>
+                <button class="mood-btn btn-yellow" onclick="selectMood('ecstatic', 100, 100)">Ecstatic</button>
 
-            <div class="slider-group">
-                <span class="slider-label">STRES <span class="label-icon">☁️</span></span>
-                <div class="slider-wrapper lightsaber-wrapper saber-yellow">
-                    <input type="range" class="saber-range" id="stresRange" value="@(gulsah?.Stres ?? 0)" min="0" max="100" oninput="sendMoodUpdate()">
-                </div>
-                <span class="slider-value" id="stresVal">%@(gulsah?.Stres ?? 0)</span>
+                <!-- ROW 2 -->
+                <button class="mood-btn btn-red" onclick="selectMood('worried', 0, 51)">Worried</button>
+                <button class="mood-btn btn-red" onclick="selectMood('angry', 49, 51)">Angry</button>
+                <button class="mood-btn btn-yellow" onclick="selectMood('happy', 51, 51)">Happy</button>
+                <button class="mood-btn btn-yellow" onclick="selectMood('excited', 100, 51)">Excited</button>
+
+                <!-- ROW 3 -->
+                <button class="mood-btn btn-blue" onclick="selectMood('lonely', 0, 49)">Lonely</button>
+                <button class="mood-btn btn-blue" onclick="selectMood('sad', 49, 49)">Sad</button>
+                <button class="mood-btn btn-green" onclick="selectMood('ease', 51, 49)">At Ease</button>
+                <button class="mood-btn btn-green" onclick="selectMood('content', 100, 49)">Content</button>
+
+                <!-- ROW 4 -->
+                <button class="mood-btn btn-blue" onclick="selectMood('hopeless', 0, 0)">Hopeless</button>
+                <button class="mood-btn btn-blue" onclick="selectMood('disappointed', 49, 0)">Disappointed</button>
+                <button class="mood-btn btn-green" onclick="selectMood('calm', 51, 0)">Calm</button>
+                <button class="mood-btn btn-green" onclick="selectMood('serene', 100, 0)">Serene</button>
             </div>
-            
         </div>
     </div>
 </div>
