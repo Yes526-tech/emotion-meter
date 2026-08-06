@@ -2,112 +2,110 @@ const connection = new signalR.HubConnectionBuilder()
     .withUrl("/moodHub")
     .build();
 
-connection.start().catch(err => console.error(err.toString()));
+connection.start().catch(function (err) {
+    return console.error(err.toString());
+});
 
-let currentAngle = 0; // Default straight up (Happy)
-let isDragging = false;
-let aiDebounceTimer = null;
+// Map emotions to specific octopus images and filters
+const moodMap = {
+    // Red Quadrant (Angry/Furious base)
+    'furious': { image: 'furious_jedi_octopus_1786010714248.png', filterClass: 'filter-intense-red' },
+    'nervous': { image: 'furious_jedi_octopus_1786010714248.png', filterClass: 'filter-mild-red' },
+    'worried': { image: 'angry_jedi_octopus_1786010740799.png', filterClass: 'filter-mild-red' },
+    'angry':   { image: 'angry_jedi_octopus_1786010740799.png', filterClass: 'filter-intense-red' },
+    
+    // Yellow Quadrant (Cheerful/Ecstatic base)
+    'cheerful':{ image: 'cheerful_jedi_octopus_1786010818921.png', filterClass: 'filter-mild-yellow' },
+    'ecstatic':{ image: 'cheerful_jedi_octopus_1786010818921.png', filterClass: 'filter-intense-yellow' },
+    'happy':   { image: 'cheerful_jedi_octopus_1786010818921.png', filterClass: 'filter-mild-yellow' },
+    'excited': { image: 'cheerful_jedi_octopus_1786010818921.png', filterClass: 'filter-intense-yellow' },
 
-// Angles map to CSS rotation where Top is 0, Left is -90, Right is 90
-const segments = [
-    { name: 'furious', label: "I'M NOT GOOD", min: -90, max: -60, mutluluk: 0, stres: 100 },
-    { name: 'angry', label: "Kızgın", min: -60, max: -30, mutluluk: 20, stres: 80 },
-    { name: 'worried', label: "Endişeli", min: -30, max: 0, mutluluk: 40, stres: 60 },
-    { name: 'happy', label: "Mutlu", min: 0, max: 30, mutluluk: 60, stres: 40 },
-    { name: 'cheerful', label: "Neşeli", min: 30, max: 60, mutluluk: 80, stres: 20 },
-    { name: 'ecstatic', label: "Harika", min: 60, max: 90, mutluluk: 100, stres: 0 }
-];
+    // Blue Quadrant (Using jedi_octopus but applying blue filters)
+    'lonely':  { image: 'jedi_octopus.png', filterClass: 'filter-intense-blue' },
+    'sad':     { image: 'jedi_octopus.png', filterClass: 'filter-mild-blue' },
+    'hopeless':{ image: 'jedi_octopus.png', filterClass: 'filter-intense-blue' },
+    'disappointed':{ image: 'jedi_octopus.png', filterClass: 'filter-mild-blue' },
 
-function initGauge() {
-    const gaugeWrapper = document.querySelector('.gauge-wrapper');
-    if (!gaugeWrapper) return;
-    
-    gaugeWrapper.addEventListener('mousedown', startDrag);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', endDrag);
-    
-    gaugeWrapper.addEventListener('touchstart', startDrag);
-    document.addEventListener('touchmove', drag, {passive: false});
-    document.addEventListener('touchend', endDrag);
-    
-    setNeedleAngle(0); // Default to middle (Happy)
-}
+    // Green Quadrant (Using jedi_octopus base)
+    'ease':    { image: 'jedi_octopus.png', filterClass: 'filter-mild-green' },
+    'content': { image: 'jedi_octopus.png', filterClass: 'filter-mild-green' },
+    'calm':    { image: 'jedi_octopus.png', filterClass: 'filter-intense-green' },
+    'serene':  { image: 'jedi_octopus.png', filterClass: 'filter-intense-green' },
+};
 
-function startDrag(e) {
-    isDragging = true;
-    drag(e);
-}
+let currentEmotion = 'calm';
 
-function endDrag() {
-    if (!isDragging) return;
-    isDragging = false;
+window.selectMood = function(emotion, mutluluk, stres) {
+    currentEmotion = emotion;
+    updateUI(emotion);
     
-    const segment = segments.find(s => currentAngle >= s.min && currentAngle <= s.max) || segments[0];
-    
-    connection.invoke("UpdateMood", "Gülşah", segment.stres, segment.mutluluk)
-              .catch(err => console.error(err.toString()));
-              
-    checkAiTrigger(segment.name);
-}
-
-function drag(e) {
-    if (!isDragging) return;
-    e.preventDefault(); 
-    
-    const gaugeWrapper = document.querySelector('.gauge-wrapper');
-    const rect = gaugeWrapper.getBoundingClientRect();
-    
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.bottom; // Origin is at bottom center
-    
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-    
-    const dx = clientX - centerX;
-    const dy = clientY - centerY;
-    
-    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
-    angle += 90; 
-    
-    if (angle < -90) angle = -90;
-    if (angle > 90) angle = 90;
-    if (dy > 0) {
-        if (dx < 0) angle = -90;
-        else angle = 90;
-    }
-    
-    setNeedleAngle(angle);
-}
-
-function setNeedleAngle(angle) {
-    currentAngle = angle;
-    document.getElementById('gaugeNeedle').style.transform = `translateX(-50%) rotate(${angle}deg)`;
-    
-    const segment = segments.find(s => angle >= s.min && angle <= s.max) || segments[0];
-    const statusText = document.getElementById('gaugeStatusText');
-    statusText.innerText = segment.label;
-    
-    const colors = ["#ff2a2a", "#ff7700", "#ffcc00", "#aaff00", "#22cc22", "#008800"];
-    const idx = segments.indexOf(segment);
-    statusText.style.color = colors[idx] || "#ff2a2a";
-}
+    connection.invoke("UpdateMood", "Gülşah", parseInt(stres), parseInt(mutluluk))
+              .catch(function (err) {
+                  console.error(err.toString());
+              });
+};
 
 connection.on("ReceiveMoodUpdate", function (userName, stres, mutluluk) {
     if (userName === "Gülşah") {
-        let segment = segments.find(s => s.stres === stres && s.mutluluk === mutluluk);
-        if (segment) {
-            let targetAngle = (segment.min + segment.max) / 2;
-            setNeedleAngle(targetAngle);
-            checkAiTrigger(segment.name);
-        }
+        let emotion = determineEmotionFromValues(mutluluk, stres);
+        updateUI(emotion);
     }
 });
 
-function checkAiTrigger(moodName) {
+function determineEmotionFromValues(mutluluk, stres) {
+    if(stres > 50) {
+        if(mutluluk > 50) {
+            if(stres == 100 && mutluluk == 100) return 'ecstatic';
+            if(stres == 100) return 'cheerful';
+            if(mutluluk == 100) return 'excited';
+            return 'happy';
+        } else {
+            if(stres == 100 && mutluluk == 0) return 'furious';
+            if(stres == 100) return 'nervous';
+            if(mutluluk == 0) return 'worried';
+            return 'angry';
+        }
+    } else {
+        if(mutluluk > 50) {
+            if(stres == 0 && mutluluk == 100) return 'serene';
+            if(stres == 0) return 'calm';
+            if(mutluluk == 100) return 'content';
+            return 'ease';
+        } else {
+            if(stres == 0 && mutluluk == 0) return 'hopeless';
+            if(stres == 0) return 'disappointed';
+            if(mutluluk == 0) return 'lonely';
+            return 'sad';
+        }
+    }
+}
+
+function updateUI(emotion) {
+    let mainImg = document.getElementById("main-octopus");
+    if (!mainImg) return;
+    
+    const config = moodMap[emotion] || moodMap['calm'];
+    
+    mainImg.src = "/images/" + config.image;
+    mainImg.className = "octopus-img active-img " + config.filterClass;
+    
+    document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('active-btn'));
+    let activeBtn = Array.from(document.querySelectorAll('.mood-btn')).find(btn => btn.getAttribute('onclick').includes("'" + emotion + "'"));
+    if(activeBtn) activeBtn.classList.add('active-btn');
+
+    checkAiTrigger(emotion);
+}
+
+let aiDebounceTimer = null;
+function checkAiTrigger(emotion) {
     const aiBox = document.getElementById('aiMessageBox');
     const aiText = document.getElementById('aiMessageText');
+    if (!aiBox || !aiText) return;
+
+    // Kırmızı veya Mavi (kötü/üzgün) bölgeler seçildiğinde Emre AI devreye girsin
+    const badEmotions = ['furious', 'nervous', 'worried', 'angry', 'lonely', 'sad', 'hopeless', 'disappointed'];
     
-    if (moodName === 'furious') {
+    if (badEmotions.includes(emotion)) {
         aiBox.style.display = 'flex';
         aiText.innerText = "Emre yazıyor... 💌";
         
@@ -119,7 +117,7 @@ function checkAiTrigger(moodName) {
                     aiText.innerText = data.message;
                 })
                 .catch(() => {
-                    aiText.innerText = "Bir sorun oluştu ama sen gülümsemeyi unutma! 😊";
+                    aiText.innerText = "Aşkım şu an bir sorun oluştu ama bil ki Emre seni çok seviyor! ❤️";
                 });
         }, 800);
     } else {
@@ -128,5 +126,5 @@ function checkAiTrigger(moodName) {
 }
 
 window.onload = function() {
-    initGauge();
+    updateUI(currentEmotion);
 };
